@@ -1,5 +1,9 @@
 package com.fmi_plovdiv.CarManagementApplication.dto;
 
+import com.fmi_plovdiv.CarManagementApplication.model.Car;
+import com.fmi_plovdiv.CarManagementApplication.model.Garage;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ResponseCarDto {
@@ -9,6 +13,18 @@ public class ResponseCarDto {
     private Integer productionYear;
     private String licensePlate;
     private List<ResponseGarageDto> garages;
+
+    public static ResponseCarDto fromCar(Car car) {
+        ResponseCarDto dto = new ResponseCarDto();
+        dto.id = car.getId();
+        dto.make = car.getMake();
+        dto.model = car.getModel();
+        dto.productionYear = car.getProductionYear();
+        dto.licensePlate = car.getLicensePlate();
+        dto.garages = new ArrayList<>();
+        //TODO: fix garages and make garage info available to the car
+        return dto;
+    }
 
     public Long getId() {
         return id;

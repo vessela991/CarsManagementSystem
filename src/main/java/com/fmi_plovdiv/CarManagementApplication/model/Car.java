@@ -1,5 +1,7 @@
 package com.fmi_plovdiv.CarManagementApplication.model;
 
+import com.fmi_plovdiv.CarManagementApplication.dto.CreateCarDto;
+import com.fmi_plovdiv.CarManagementApplication.dto.UpdateCarDto;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,6 +19,35 @@ public class Car {
     @CollectionTable(name = "car_garage_ids", joinColumns = @JoinColumn(name = "car_id"))
     @Column(name = "garage_id")
     private List<Long> garageIds;
+
+    public static Car fromUpdateCarDto(Long id, UpdateCarDto updateCarDTO) {
+        Car car = new Car();
+        car.setId(id);
+        car.setMake(updateCarDTO.getMake());
+        car.setModel(updateCarDTO.getModel());
+        car.setProductionYear(updateCarDTO.getProductionYear());
+        car.setLicensePlate(updateCarDTO.getLicensePlate());
+        car.setGarageIds(updateCarDTO.getGarageIds());
+        return car;
+    }
+
+    public static Car fromCreateCarDto(CreateCarDto createCarDTO) {
+        Car car = new Car();
+        car.setMake(createCarDTO.getMake());
+        car.setModel(createCarDTO.getModel());
+        car.setProductionYear(createCarDTO.getProductionYear());
+        car.setLicensePlate(createCarDTO.getLicensePlate());
+        car.setGarageIds(createCarDTO.getGarageIds());
+        return car;
+    }
+
+    public List<Long> getGarageIds() {
+        return garageIds;
+    }
+
+    public void setGarageIds(List<Long> garageIds) {
+        this.garageIds = garageIds;
+    }
 
     public String getMake() {
         return make;
@@ -48,14 +79,6 @@ public class Car {
 
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
-    }
-
-    public List<Garage> getGarages() {
-        return garageIds;
-    }
-
-    public void setGarages(List<Garage> garages) {
-        this.garageIds = garages;
     }
 
     public void setId(Long id) {
