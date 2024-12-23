@@ -1,5 +1,7 @@
 package com.fmi_plovdiv.CarManagementApplication.model;
 
+import com.fmi_plovdiv.CarManagementApplication.dto.CreateMaintenanceDto;
+import com.fmi_plovdiv.CarManagementApplication.dto.UpdateMaintenanceDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +17,25 @@ public class Maintenance {
     private Long garageId;
     private String serviceType;
     private String scheduledDate;
+
+    public static Maintenance fromUpdateMaintenanceDto(Long id, UpdateMaintenanceDto updateMaintenanceDTO) {
+        Maintenance maintenance = new Maintenance();
+        maintenance.setId(id);
+        maintenance.setCarId(updateMaintenanceDTO.getCarId());
+        maintenance.setGarageId(updateMaintenanceDTO.getGarageId());
+        maintenance.setServiceType(updateMaintenanceDTO.getServiceType());
+        maintenance.setScheduledDate(updateMaintenanceDTO.getScheduledDate());
+        return maintenance;
+    }
+
+    public static Maintenance fromCreateMaintenanceDto(CreateMaintenanceDto createMaintenanceDTO) {
+        Maintenance maintenance = new Maintenance();
+        maintenance.setCarId(createMaintenanceDTO.getCarId());
+        maintenance.setGarageId(createMaintenanceDTO.getGarageId());
+        maintenance.setServiceType(createMaintenanceDTO.getServiceType());
+        maintenance.setScheduledDate(createMaintenanceDTO.getScheduledDate());
+        return maintenance;
+    }
 
     public Long getCarId() {
         return carId;

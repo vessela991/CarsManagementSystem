@@ -1,11 +1,23 @@
 package com.fmi_plovdiv.CarManagementApplication.dto;
 
+import com.fmi_plovdiv.CarManagementApplication.model.Garage;
+
 public class ResponseGarageDto {
     private Long id;
     private String name;
     private String location;
     private String city;
     private Integer capacity;
+
+    public static ResponseGarageDto fromGarage(Garage garage) {
+        ResponseGarageDto responseGarageDto = new ResponseGarageDto();
+        responseGarageDto.setId(garage.getId());
+        responseGarageDto.setName(garage.getName());
+        responseGarageDto.setLocation(garage.getLocation());
+        responseGarageDto.setCity(garage.getCity());
+        responseGarageDto.setCapacity(garage.getCapacity());
+        return responseGarageDto;
+    }
 
     public Long getId() {
         return id;

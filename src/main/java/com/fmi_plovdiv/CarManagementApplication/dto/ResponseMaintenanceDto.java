@@ -1,5 +1,7 @@
 package com.fmi_plovdiv.CarManagementApplication.dto;
 
+import com.fmi_plovdiv.CarManagementApplication.model.Maintenance;
+
 public class ResponseMaintenanceDto {
     private Long id;
     private Long carId;
@@ -8,6 +10,18 @@ public class ResponseMaintenanceDto {
     private String scheduledDate;
     private Long garageId;
     private String garageName;
+
+    public static ResponseMaintenanceDto fromMaintenance(Maintenance maintenance, String carName, String garageName) {
+        ResponseMaintenanceDto dto = new ResponseMaintenanceDto();
+        dto.setId(maintenance.getId());
+        dto.setCarId(maintenance.getCarId());
+        dto.setCarName(carName);
+        dto.setServiceType(maintenance.getServiceType());
+        dto.setScheduledDate(maintenance.getScheduledDate());
+        dto.setGarageId(maintenance.getGarageId());
+        dto.setGarageName(garageName);
+        return dto;
+    }
 
     public Long getId() {
         return id;
