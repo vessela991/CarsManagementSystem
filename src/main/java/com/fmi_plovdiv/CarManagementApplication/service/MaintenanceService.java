@@ -4,6 +4,9 @@ import com.fmi_plovdiv.CarManagementApplication.dto.*;
 import com.fmi_plovdiv.CarManagementApplication.model.Maintenance;
 import com.fmi_plovdiv.CarManagementApplication.repository.GarageRepository;
 import com.fmi_plovdiv.CarManagementApplication.repository.MaintenanceRepository;
+import com.fmi_plovdiv.CarManagementApplication.repository.MaintenanceSpecifications;
+import com.sun.tools.javac.Main;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.Month;
@@ -107,7 +110,7 @@ public class MaintenanceService {
         do {
             yearMonthRequestsMap.put(currentYearMonth, 0);
             currentYearMonth = currentYearMonth.plusMonths(1);
-        } while (currentYearMonth.isBefore(yearMonthEnd));
+        } while (currentYearMonth.isBefore(yearMonthEnd.plusMonths(1)));
 
         for (Maintenance maintenance : maintenances) {
             YearMonth maintenanceMonth = YearMonth.parse(maintenance.getScheduledDate(), DateTimeFormatter.ISO_LOCAL_DATE);
@@ -123,5 +126,22 @@ public class MaintenanceService {
             monthlyRequestsReportDtos.add(requestsReportDto);
         }
         return monthlyRequestsReportDtos;
+    }
+
+    public List<ResponseMaintenanceDto> filter(Long carId, Long garageId) {
+        List<ResponseMaintenanceDto> responseMaintenanceDtos = new ArrayList<>();
+
+        Specification<Maintenance> spec = Specification
+                .where(MaintenanceSpecifications.hasCarId(carId))
+                .and(MaintenanceSpecifications.hasGarageId(garageId));
+
+       maintenanceRepository.findAll(spec).forEach(maintenance -> {
+            ResponseCarDto car = carService.getById(maintenance.getCarId());
+            ResponseGarageDto garage = garageService.getById(maintenance.getGarageId());
+            ResponseMaintenanceDto responseMaintenanceDto = ResponseMaintenanceDto.fromMaintenance(maintenance, car.getMake(), garage.getName());
+            responseMaintenanceDtos.add(responseMaintenanceDto);
+        });
+
+       return responseMaintenanceDtos;
     }
 }

@@ -1,9 +1,6 @@
 package com.fmi_plovdiv.CarManagementApplication.controller;
 
-import com.fmi_plovdiv.CarManagementApplication.dto.CreateMaintenanceDto;
-import com.fmi_plovdiv.CarManagementApplication.dto.MonthlyRequestsReportDto;
-import com.fmi_plovdiv.CarManagementApplication.dto.ResponseMaintenanceDto;
-import com.fmi_plovdiv.CarManagementApplication.dto.UpdateMaintenanceDto;
+import com.fmi_plovdiv.CarManagementApplication.dto.*;
 import com.fmi_plovdiv.CarManagementApplication.repository.MaintenanceRepository;
 import com.fmi_plovdiv.CarManagementApplication.service.MaintenanceService;
 import jakarta.validation.Valid;
@@ -44,11 +41,9 @@ public class MaintenanceController {
 
     @GetMapping
     public ResponseEntity<List<ResponseMaintenanceDto>> getAllMaintenances(@RequestParam(required = false) Long carId,
-                                                                           @RequestParam(required = false) Long garageId,
-                                                                           @RequestParam(required = false) String startDate,
-                                                                           @RequestParam(required = false) String endDate) {
+                                                                           @RequestParam(required = false) Long garageId) {
         //TODO: apply filtering
-        List<ResponseMaintenanceDto> responseMaintenanceDtosList = maintenanceService.getAll();
+        List<ResponseMaintenanceDto> responseMaintenanceDtosList = maintenanceService.filter(carId, garageId);
         return ResponseEntity.ok(responseMaintenanceDtosList);
     }
 

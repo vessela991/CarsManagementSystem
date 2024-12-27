@@ -5,7 +5,8 @@ import com.fmi_plovdiv.CarManagementApplication.dto.ResponseCarDto;
 import com.fmi_plovdiv.CarManagementApplication.dto.UpdateCarDto;
 import com.fmi_plovdiv.CarManagementApplication.model.Car;
 import com.fmi_plovdiv.CarManagementApplication.repository.CarRepository;
-import jakarta.validation.Valid;
+import com.fmi_plovdiv.CarManagementApplication.repository.CarSpecifications;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ public class CarService {
     public CarService(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
-
 
     public ResponseCarDto getById(Long id) {
         Car car = carRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Car with ID %s not found", id)));
@@ -35,13 +35,22 @@ public class CarService {
         carRepository.deleteById(id);
     }
 
-    public List<ResponseCarDto> getAll() {
+    public List<ResponseCarDto> getAll(String make, Long garageId) {
         List<ResponseCarDto> responseCarDtosList = new ArrayList<>();
-        carRepository.findAll().forEach(car -> responseCarDtosList.add(ResponseCarDto.fromCar(car)));
+
+        Specification<Car> spec = Specification
+                .where(CarSpecifications.hasCarMake(make))
+                .and(CarSpecifications.hasGarageId(garageId));
+
+        carRepository.findAll(spec).forEach(car -> {
+            ResponseCarDto responseCarDto = ResponseCarDto.fromCar(car);
+            responseCarDtosList.add(responseCarDto);
+        });
+
         return responseCarDtosList;
     }
 
-    public ResponseCarDto create(@Valid CreateCarDto createCarDTO) {
+    public ResponseCarDto create(CreateCarDto createCarDTO) {
         Car savedCar = carRepository.save(Car.fromCreateCarDto(createCarDTO));
         return ResponseCarDto.fromCar(savedCar);
     }

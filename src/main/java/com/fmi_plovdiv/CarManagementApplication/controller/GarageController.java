@@ -44,7 +44,7 @@ public class GarageController {
 
     @GetMapping
     public ResponseEntity<List<ResponseGarageDto>> getAllGarages(@RequestParam(required = false) String city) {
-        List<ResponseGarageDto> responseGarageDtosList = garageService.getAll();
+        List<ResponseGarageDto> responseGarageDtosList = garageService.getAll(city);
         return ResponseEntity.ok(responseGarageDtosList);
     }
 

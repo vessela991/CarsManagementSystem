@@ -3,6 +3,8 @@ package com.fmi_plovdiv.CarManagementApplication.service;
 import com.fmi_plovdiv.CarManagementApplication.dto.*;
 import com.fmi_plovdiv.CarManagementApplication.model.Garage;
 import com.fmi_plovdiv.CarManagementApplication.repository.GarageRepository;
+import com.fmi_plovdiv.CarManagementApplication.repository.GarageSpecifications;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,9 +34,15 @@ public class GarageService {
         garageRepository.deleteById(id);
     }
 
-    public List<ResponseGarageDto> getAll() {
+    public List<ResponseGarageDto> getAll(String city) {
         List<ResponseGarageDto> responseGarageDtoList = new ArrayList<>();
-        garageRepository.findAll().forEach(garage -> responseGarageDtoList.add(ResponseGarageDto.fromGarage(garage)));
+        Specification<Garage> spec = Specification
+                .where(GarageSpecifications.hasCity(city));
+
+        garageRepository.findAll(spec).forEach(garage -> {
+            ResponseGarageDto responseGarageDto = ResponseGarageDto.fromGarage(garage);
+            responseGarageDtoList.add(responseGarageDto);
+        });
         return responseGarageDtoList;
     }
 

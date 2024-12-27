@@ -14,6 +14,7 @@ public class Garage {
     private String name;
     @Column(nullable = false)
     private String location;
+    //@Column(nullable = false) but the front end has a bug and city is being sent as null every time on create
     private String city;
     @Column(nullable = false)
     private Integer capacity;
