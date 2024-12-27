@@ -1,10 +1,17 @@
 package com.fmi_plovdiv.CarManagementApplication.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class UpdateMaintenanceDto {
+    @NotNull(message = "Car Id is mandatory")
     private Long carId;
-    private String serviceType;
-    private String scheduledDate;
+    @NotNull(message = "Garage Id is mandatory")
     private Long garageId;
+    @NotBlank(message = "Service type is mandatory")
+    private String serviceType;
+    @NotBlank(message = "Schedule date is mandatory")
+    private String scheduledDate;
 
     public Long getCarId() {
         return carId;

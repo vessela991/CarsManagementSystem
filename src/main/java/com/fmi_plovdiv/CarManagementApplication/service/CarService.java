@@ -5,6 +5,7 @@ import com.fmi_plovdiv.CarManagementApplication.dto.ResponseCarDto;
 import com.fmi_plovdiv.CarManagementApplication.dto.UpdateCarDto;
 import com.fmi_plovdiv.CarManagementApplication.model.Car;
 import com.fmi_plovdiv.CarManagementApplication.repository.CarRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Service
 public class CarService {
-    private CarRepository carRepository;
+    private final CarRepository carRepository;
 
     public CarService(CarRepository carRepository) {
         this.carRepository = carRepository;
@@ -40,7 +41,7 @@ public class CarService {
         return responseCarDtosList;
     }
 
-    public ResponseCarDto create(CreateCarDto createCarDTO) {
+    public ResponseCarDto create(@Valid CreateCarDto createCarDTO) {
         Car savedCar = carRepository.save(Car.fromCreateCarDto(createCarDTO));
         return ResponseCarDto.fromCar(savedCar);
     }

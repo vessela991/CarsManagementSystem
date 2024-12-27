@@ -5,13 +5,16 @@ import com.fmi_plovdiv.CarManagementApplication.dto.GarageDailyAvailabilityRepor
 import com.fmi_plovdiv.CarManagementApplication.dto.ResponseGarageDto;
 import com.fmi_plovdiv.CarManagementApplication.dto.UpdateGarageDto;
 import com.fmi_plovdiv.CarManagementApplication.service.GarageService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/garages")
+@Validated
 public class GarageController {
 
     private final GarageService garageService;
@@ -28,7 +31,7 @@ public class GarageController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseGarageDto> updateGarage(@PathVariable Long id, @RequestBody UpdateGarageDto updateGarageDTO) {
+    public ResponseEntity<ResponseGarageDto> updateGarage(@PathVariable Long id, @RequestBody @Valid UpdateGarageDto updateGarageDTO) {
         ResponseGarageDto responseGarageDto = garageService.update(id, updateGarageDTO);
         return ResponseEntity.ok(responseGarageDto);
     }
@@ -46,7 +49,7 @@ public class GarageController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseGarageDto> createGarage(@RequestBody CreateGarageDto createGarageDTO) {
+    public ResponseEntity<ResponseGarageDto> createGarage(@RequestBody @Valid CreateGarageDto createGarageDTO) {
         ResponseGarageDto responseGarageDto = garageService.create(createGarageDTO);
         return ResponseEntity.ok(responseGarageDto);
     }

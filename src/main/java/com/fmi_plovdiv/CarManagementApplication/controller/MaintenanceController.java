@@ -6,13 +6,16 @@ import com.fmi_plovdiv.CarManagementApplication.dto.ResponseMaintenanceDto;
 import com.fmi_plovdiv.CarManagementApplication.dto.UpdateMaintenanceDto;
 import com.fmi_plovdiv.CarManagementApplication.repository.MaintenanceRepository;
 import com.fmi_plovdiv.CarManagementApplication.service.MaintenanceService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/maintenance")
+@Validated
 public class MaintenanceController {
 
     private final MaintenanceService maintenanceService;
@@ -28,7 +31,7 @@ public class MaintenanceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseMaintenanceDto> updateMaintenance(@PathVariable Long id, @RequestBody UpdateMaintenanceDto updateMaintenanceDTO) {
+    public ResponseEntity<ResponseMaintenanceDto> updateMaintenance(@PathVariable Long id, @RequestBody @Valid UpdateMaintenanceDto updateMaintenanceDTO) {
         ResponseMaintenanceDto responseMaintenanceDto = maintenanceService.update(id, updateMaintenanceDTO);
         return ResponseEntity.ok(responseMaintenanceDto);
     }
@@ -50,7 +53,7 @@ public class MaintenanceController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseMaintenanceDto> createMaintenance(@RequestBody CreateMaintenanceDto createMaintenanceDTO) {
+    public ResponseEntity<ResponseMaintenanceDto> createMaintenance(@RequestBody @Valid CreateMaintenanceDto createMaintenanceDTO) {
         ResponseMaintenanceDto responseMaintenanceDto = maintenanceService.create(createMaintenanceDTO);
         return ResponseEntity.ok(responseMaintenanceDto);
     }

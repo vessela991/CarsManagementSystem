@@ -2,10 +2,7 @@ package com.fmi_plovdiv.CarManagementApplication.model;
 
 import com.fmi_plovdiv.CarManagementApplication.dto.CreateMaintenanceDto;
 import com.fmi_plovdiv.CarManagementApplication.dto.UpdateMaintenanceDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Maintenance {
@@ -13,9 +10,13 @@ public class Maintenance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private Long carId;
+    @Column(nullable = false)
     private Long garageId;
+    @Column(nullable = false)
     private String serviceType;
+    @Column(nullable = false)
     private String scheduledDate;
 
     public static Maintenance fromUpdateMaintenanceDto(Long id, UpdateMaintenanceDto updateMaintenanceDTO) {
