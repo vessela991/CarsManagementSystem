@@ -11,7 +11,21 @@ public class CarSpecifications {
     }
 
     public static Specification<Car> hasGarageId(Long garageId) {
+        return (root, _, criteriaBuilder) -> {
+            if (garageId == null) {
+                return criteriaBuilder.conjunction();
+            }
+            return criteriaBuilder.isMember(garageId, root.get("garageIds"));
+        };
+    }
+
+    public static Specification<Car> hasFromYear(Integer fromYear) {
         return (root, _, criteriaBuilder) ->
-                garageId != null ? criteriaBuilder.equal(root.get("garageId"), garageId) : criteriaBuilder.conjunction();
+                fromYear != null ? criteriaBuilder.greaterThanOrEqualTo(root.get("productionYear"), fromYear) : criteriaBuilder.conjunction();
+    }
+
+    public static Specification<Car> hasToYear(Integer toYear) {
+        return (root, _, criteriaBuilder) ->
+                toYear != null ? criteriaBuilder.lessThanOrEqualTo(root.get("productionYear"), toYear) : criteriaBuilder.conjunction();
     }
 }

@@ -1,18 +1,16 @@
 package com.fmi_plovdiv.CarManagementApplication.service;
 
 import com.fmi_plovdiv.CarManagementApplication.dto.*;
+import com.fmi_plovdiv.CarManagementApplication.exception.NotFoundException;
 import com.fmi_plovdiv.CarManagementApplication.model.Maintenance;
 import com.fmi_plovdiv.CarManagementApplication.repository.GarageRepository;
 import com.fmi_plovdiv.CarManagementApplication.repository.MaintenanceRepository;
 import com.fmi_plovdiv.CarManagementApplication.repository.MaintenanceSpecifications;
-import com.sun.tools.javac.Main;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.Month;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +36,7 @@ public class MaintenanceService {
     public ResponseMaintenanceDto getById(Long id) {
         Maintenance maintenance = maintenanceRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Maintenance with id %s not found", id)));
+                .orElseThrow(() -> new NotFoundException(String.format("Maintenance with id %s not found", id)));
         ResponseCarDto car = carService.getById(maintenance.getCarId());
         ResponseGarageDto garage = garageService.getById(maintenance.getGarageId());
         //get car info and garage info
@@ -48,7 +46,7 @@ public class MaintenanceService {
     public ResponseMaintenanceDto update(Long id, UpdateMaintenanceDto updateMaintenanceDTO) {
         Maintenance maintenance = maintenanceRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Maintenance with id %s not found", id)));
+                .orElseThrow(() -> new NotFoundException(String.format("Maintenance with id %s not found", id)));
         //check if there is free space
         String scheduledDate = updateMaintenanceDTO.getScheduledDate();
         //check if there are free spots in the service for the date

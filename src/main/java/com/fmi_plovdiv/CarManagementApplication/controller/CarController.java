@@ -41,8 +41,10 @@ public class CarController {
 
     @GetMapping
     public ResponseEntity<List<ResponseCarDto>> getAllCars(@RequestParam(required = false) String carMake,
-                                                           @RequestParam(required = false) Long garageId) {
-        List<ResponseCarDto> responseCarDtosList = carService.getAll(carMake, garageId);
+                                                           @RequestParam(required = false) Long garageId,
+                                                           @RequestParam(required = false) Integer fromYear,
+                                                           @RequestParam(required = false) Integer toYear) {
+        List<ResponseCarDto> responseCarDtosList = carService.getAll(carMake, garageId, fromYear, toYear);
         return ResponseEntity.ok(responseCarDtosList);
     }
 

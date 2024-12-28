@@ -3,8 +3,8 @@ package com.fmi_plovdiv.CarManagementApplication.dto;
 import com.fmi_plovdiv.CarManagementApplication.model.Car;
 import com.fmi_plovdiv.CarManagementApplication.model.Garage;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResponseCarDto {
     private Long id;
@@ -14,15 +14,16 @@ public class ResponseCarDto {
     private String licensePlate;
     private List<ResponseGarageDto> garages;
 
-    public static ResponseCarDto fromCar(Car car) {
+    public static ResponseCarDto fromCar(Car car, List<Garage> garages) {
         ResponseCarDto dto = new ResponseCarDto();
         dto.id = car.getId();
         dto.make = car.getMake();
         dto.model = car.getModel();
         dto.productionYear = car.getProductionYear();
         dto.licensePlate = car.getLicensePlate();
-        dto.garages = new ArrayList<>();
-        //TODO: fix garages and make garage info available to the car
+        dto.garages = garages.stream()
+                .map(ResponseGarageDto::fromGarage)
+                .collect(Collectors.toList());
         return dto;
     }
 

@@ -24,4 +24,12 @@ public class GlobalExceptionHandler {
         responseObject.put("status", HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(responseObject, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNotFoundExceptions(NotFoundException ex) {
+        Map<String, Object> responseObject = new HashMap<>();
+        responseObject.put("error", ex.getMessage());
+        responseObject.put("status", HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(responseObject, HttpStatus.NOT_FOUND);
+    }
 }

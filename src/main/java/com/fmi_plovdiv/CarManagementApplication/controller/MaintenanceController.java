@@ -42,7 +42,6 @@ public class MaintenanceController {
     @GetMapping
     public ResponseEntity<List<ResponseMaintenanceDto>> getAllMaintenances(@RequestParam(required = false) Long carId,
                                                                            @RequestParam(required = false) Long garageId) {
-        //TODO: apply filtering
         List<ResponseMaintenanceDto> responseMaintenanceDtosList = maintenanceService.filter(carId, garageId);
         return ResponseEntity.ok(responseMaintenanceDtosList);
     }
