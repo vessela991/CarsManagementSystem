@@ -10,7 +10,8 @@ import com.fmi_plovdiv.CarManagementApplication.repository.MaintenanceRepository
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.YearMonth;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +61,19 @@ public class GarageService {
 
     public List<GarageDailyAvailabilityReportDto> getReport(Long garageId, String startDate, String endDate) {
         List<GarageDailyAvailabilityReportDto> responseGarageDailyAvailabilityReportDtoList = new ArrayList<>();
-        //TODO: query the DB
+        Garage garage = garageRepository.findById(garageId)
+                .orElseThrow(() -> new NotFoundException(String.format("Garage with id %s not found", garageId)));
+        LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_LOCAL_DATE).plusDays(1);
+        LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_LOCAL_DATE);
+        while (start.isBefore(end)) {
+            GarageDailyAvailabilityReportDto garageDailyAvailabilityReportDto = new GarageDailyAvailabilityReportDto();
+            garageDailyAvailabilityReportDto.setDate(start.toString());
+            List<Maintenance> maintenances = maintenanceRepository.findByGarageIdAndScheduleDate(garageId, start.toString());
+            garageDailyAvailabilityReportDto.setRequests(maintenances.size());
+            garageDailyAvailabilityReportDto.setAvailableCapacity(garage.getCapacity() - maintenances.size());
+            responseGarageDailyAvailabilityReportDtoList.add(garageDailyAvailabilityReportDto);
+            start = start.plusDays(1);
+        }
         return responseGarageDailyAvailabilityReportDtoList;
     }
 }
